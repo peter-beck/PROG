@@ -1,4 +1,5 @@
 #!/bin/bash
+#the program finds all the IP addresses on the internal network 
 
 if [ "$1" == "--help" ] || [ "$1" == "-h" ] #if zadanie3.sh --help or -h
 then
