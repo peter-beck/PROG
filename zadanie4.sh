@@ -35,6 +35,9 @@ else
     echo -e "\nMy default gateway is not available." >> uOUT.txt   #write the connectivity to file
 fi
 
+#availability of my DNS servers
+#nmcli dev show | grep DNS
+
 #ping google 3 times
 google=$(nslookup google.com | grep 'Address: ' | awk '{ print $2}')
 
