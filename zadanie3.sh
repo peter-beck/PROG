@@ -17,7 +17,7 @@ read IP #input
 echo -e "NAJDENE IP:\n" > IP.txt   #clear the IP.txt file with initial message
 echo -e "VYSTUP PING:\n" > out.txt  #clear the out.txt file with initial message
 
-for number in $(seq 4 1 16)    #loop, which generates numbers from 1 to 254
+for number in $(seq 1 1 254)    #loop, which generates numbers from 1 to 254
 do
     ping -c3 -i3 "$IP"".""$number" >> out.txt 2>&1  #message transfer to file
     if [ $? -eq 0 ] #if the ping output is 0
@@ -30,4 +30,3 @@ echo -e "\n"
 cat IP.txt  #prints the IP's out
 
 exit 0
-
