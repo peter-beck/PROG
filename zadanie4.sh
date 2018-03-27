@@ -2,23 +2,16 @@
 
 if [ "$1" == "--help" ] || [ "$1" == "-h" ] #if zadanie3.sh --help or -h
 then
-    echo -e "Uzivatel zada prve 3 bajty vo formate xx.xx.xx"
-    echo -e "Skript nasledne dopise adresu v intervale 1-254 a prepinguje siet"
-    echo -e "Program vypise zoznam IP adries, ktore najdeme v subore IP.txt"
+    echo -e "Program skontroluje dostupnost IPv4 zariadenia, predvolenej brany, DNS serverov a serveru Googla."
     exit 0
 fi
 
 #program starts here
-#echo "Napiste prve 3 bajty IP vo formate xx.xx.xx, potom slacte [ENTER]:"   #input message
-
-#read IP #input
-
 echo -e "USER OUTPUT:" > uOUT.txt   #clear the IP.txt file with initial message
 echo -e "PROGRAM OUTPUT:\n" > pOut.txt  #clear the out.txt file with initial message
 
 #availability of my IPv4 address
 mojaIP=$(ifconfig enp0s3 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
-#echo "moja ip: $mojaIP"
 ping -c3 $mojaIP >> pOut.txt 2>&1  #message transfer to file
 
 if [ $? -eq 0 ] #if the ping output is 0
@@ -31,7 +24,6 @@ fi
 
 #availability of my default gateway
 GW=$(/sbin/ip route | awk '/default/ { print $3 }')
-#echo $GW
 
 ping -c3 $GW >> pOut.txt 2>&1  #message transfer to file
 
@@ -44,12 +36,14 @@ else
 fi
 
 #ping google 3 times
-ping -c3 -i3 216.58.209.195 >> pOut.txt 2>&1  #message transfer to file
+google=$(nslookup google.com | grep 'Address: ' | awk '{ print $2}')
+
+ping -c3 $google >> pOut.txt 2>&1  #message transfer to file
 
 if [ $? -eq 0 ] #if the ping output is 0
 then 
     echo -e "\nGoogle is available, the internet connection is working." >> uOUT.txt   #write the connectivity to file
-    echo -e "My IP: 216.58.209.195" >> uOUT.txt
+    echo -e "Google's IP: $google" >> uOUT.txt
 else
     echo -e "\nGoogle is not available." >> uOUT.txt   #write the connectivity to file
 fi
