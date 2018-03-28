@@ -11,7 +11,10 @@ echo -e "USER OUTPUT:" > uOUT.txt   #clear the IP.txt file with initial message
 echo -e "PROGRAM OUTPUT:\n" > pOut.txt  #clear the out.txt file with initial message
 
 #availability of my IPv4 address
-mojaIP=$(ifconfig enp0s3 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
+netCards=($(basename -a /sys/class/net/*))
+echo ${netCards[0]}
+
+mojaIP=$(ifconfig ${netCards[0]} | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
 ping -c3 $mojaIP >> pOut.txt 2>&1  #message transfer to file
 
 if [ $? -eq 0 ] #if the ping output is 0
