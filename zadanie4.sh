@@ -11,22 +11,21 @@ echo -e "USER OUTPUT:" > uOUT.txt   #clear the IP.txt file with initial message
 echo -e "PROGRAM OUTPUT:\n" > pOut.txt  #clear the out.txt file with initial message
 
 #availability of my IPv4 address
-netCards=($(basename -a /sys/class/net/*))
-echo ${netCards[0]}
+netCards=($(basename -a /sys/class/net/*)) #array of my network adapters
 
-mojaIP=$(ifconfig ${netCards[0]} | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
-ping -c3 $mojaIP >> pOut.txt 2>&1  #message transfer to file
+myIP=$(ifconfig ${netCards[0]} | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}') #grep my IP from the first network adapter of the list
+ping -c3 $myIP >> pOut.txt 2>&1  #message transfer to file
 
 if [ $? -eq 0 ] #if the ping output is 0
 then 
     echo -e "\nMy IPv4 is available." >> uOUT.txt   #write the connectivity to file
-    echo -e "My IP: $mojaIP" >> uOUT.txt
+    echo -e "My IP: $myIP" >> uOUT.txt
 else
     echo -e "\nMy IPv4 is not available." >> uOUT.txt   #write the connectivity to file
 fi
 
 #availability of my default gateway
-GW=$(/sbin/ip route | awk '/default/ { print $3 }')
+GW=$(/sbin/ip route | awk '/default/ { print $3 }') #get my default gateway
 
 ping -c3 $GW >> pOut.txt 2>&1  #message transfer to file
 
@@ -39,8 +38,9 @@ else
 fi
 
 #availability of my DNS servers
-DNS=($(nmcli dev show | grep DNS | grep -Po '[0-9.]{7,15}'))
+DNS=($(nmcli dev show | grep DNS | grep -Po '[0-9.]{7,15}')) #save the IP's of all DNS servers to array
 
+#c-style for loop
 for ((x=0; x<${#DNS[@]}; x++));
 do
   ping -c3 ${DNS[$x]} >> pOut.txt 2>&1  #message transfer to file
@@ -56,7 +56,7 @@ do
 done
 
 #ping google 3 times
-google=$(nslookup google.com | grep 'Address: ' | awk '{ print $2}')
+google=$(nslookup google.com | grep 'Address: ' | awk '{ print $2}')    #get the IP of google.com
 
 ping -c3 $google >> pOut.txt 2>&1  #message transfer to file
 
@@ -75,4 +75,3 @@ cat uOUT.txt  #prints the IP's out
 echo -e "\nDuraction: $SECONDS seconds"
 
 exit 0
-
