@@ -36,7 +36,21 @@ else
 fi
 
 #availability of my DNS servers
-#nmcli dev show | grep DNS
+DNS=($(nmcli dev show | grep DNS | grep -Po '[0-9.]{7,15}'))
+
+for ((x=0; x<${#DNS[@]}; x++));
+do
+  ping -c3 ${DNS[$x]} >> pOut.txt 2>&1  #message transfer to file
+
+    if [ $? -eq 0 ] #if the ping output is 0
+    then 
+        echo -e "\n"$((x+1))". DNS is available." >> uOUT.txt   #write the connectivity to file
+        echo -e "DNS's IP: ${DNS[$x]}" >> uOUT.txt
+    else
+        echo -e "\n"$((x+1))".This DNS is not available." >> uOUT.txt   #write the connectivity to file
+        echo -e "DNS's IP: ${DNS[$x]}" >> uOUT.txt
+    fi
+done
 
 #ping google 3 times
 google=$(nslookup google.com | grep 'Address: ' | awk '{ print $2}')
