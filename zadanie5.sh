@@ -33,8 +33,8 @@ do
     echo -e $((x+1))". DNS's IP: ${DNS[$x]}" >> uOUT.txt
 done
 
-#capacity of my disk's
-diskCapacity=($(df -h | grep sda | awk '{ print $2}'))  #store the capacity of my disk's in array
+#capacity of my disk's in GB
+diskCapacity=($(df -H | grep sda | awk '{ print $2}'))  #store the capacity of my disk's in array
 
 
 #c-style for loop
@@ -43,9 +43,21 @@ do
     echo -e $((x+1))". disk's capacity in GB: ${diskCapacity[$x]}" >> uOUT.txt
 done
 
-#free space on my /home partition
+#free space on my /home partition in GiB
 freeSpace=$(df -h / | grep sda | awk '{ print $4}')     #store the freespace on my "/" partition
-echo -e "Free space on my \"/\" partition in GB: $freeSpace" >> uOUT.txt
+echo -e "Free space on my \"/\" partition in GiB: $freeSpace" >> uOUT.txt
+
+#amount of my operational memory in MiB
+amountOfRAM=$(free -m | grep Mem: | awk '{ print $2}')
+echo -e "Size of my RAM in MiB: $amountOfRAM""MiB" >> uOUT.txt
+
+#usage of my RAM
+usedRAM=$(free -m | grep Mem: | awk '{ print $3}')
+percent=$(bc <<< "scale=4; $usedRAM/$amountOfRAM")
+echo $percent
+percent=$(bc <<< "scale=3; $percent*100")
+#percent=$((percent*100))
+echo $percent
 
 #prints out the user output
 cat uOUT.txt  #prints the IP's out
