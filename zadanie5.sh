@@ -67,7 +67,7 @@ OS=$(lsb_release -ds)
 echo -e "My OS: $OS" >> uOUT.txt
 
 #prints out the user output
-cat uOUT.txt  #prints the IP's out
+column -e -t -s':' uOUT.txt
 
 #duraction of the script
 echo -e "\nDuraction: $SECONDS seconds"
