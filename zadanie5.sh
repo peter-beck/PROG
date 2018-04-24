@@ -2,7 +2,7 @@
 
 if [ "$1" == "--help" ] || [ "$1" == "-h" ] #if zadanie3.sh --help or -h
 then
-    echo -e "Program skontroluje dostupnost IPv4 zariadenia, predvolenej brany, DNS serverov a serveru Googla."
+    echo -e "Script prints out informmation about my HW."
     exit 0
 fi
 
