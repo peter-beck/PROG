@@ -45,7 +45,7 @@ readInput() {
 readInput
 
 #echo $(($(date +%s) - $(date +%s -r zad8.sh)))
-#if [ $(echo $(($(date +%s) - $(date +%s -r ~/Desktop/'backup dir')))) -le 300 ]; then   #if the last modification date of the file was more then 5 minutes
+if [ $(echo $(($(date +%s) - $(date +%s -r home/flexin/Desktop/'backup dir')))) -le 300 ]; then   #if the last modification date of the file was more then 5 minutes
     echo "zaloha presla"
 
     filename=$(echo "$filename" | sed -e 's/ /_/g')
@@ -55,4 +55,4 @@ readInput
     mkdir -p ~/cron-backup/
     cp -nR "$find" ~/cron-backup/"$backupDirectory"
 
-#fi    
+fi    
